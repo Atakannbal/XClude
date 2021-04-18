@@ -18,7 +18,7 @@ ipcMain.on('ondrop', async (event, filePath) => {
 
 ipcMain.on('onsubmit', (event, payload) => {
   const {outputPath, excludedFiles, folderPath} = payload;
-  createZip(outputPath, folderPath, excludedFiles)
+  createZip(folderPath, outputPath, excludedFiles)
   event.returnValue = 'Form submitted'
 })
 
