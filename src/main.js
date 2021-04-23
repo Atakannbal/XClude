@@ -1,5 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron')
-const { createZip } = require('./services/zip')
+const { createZip } = require('../services/zip')
 const { opendir } = require('fs/promises');
 
 ipcMain.on('ondrop', async (event, filePath) => {
@@ -39,12 +39,12 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
+      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
       contextIsolation: false,
     }
   })
-
-  win.loadFile('index.html');
+  win.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   win.webContents.openDevTools()
 }
 
