@@ -2,7 +2,6 @@ const archiver = require("archiver");
 const { opendir } = require("fs/promises");
 const fs = require("fs");
 const path = require("path");
-const archive = archiver("zip");
 
 const DirentType = {
   Directory: 1,
@@ -26,8 +25,10 @@ module.exports = async (
   destinationDirectory,
   exclude = ["node_modules", ".next", ".git"]
 ) => {
+  const archive = archiver("zip");
+
   const outputFilePath = destinationDirectory + "/" + Date.now() + ".zip";
-  console.log({outputFilePath});
+  console.log({ outputFilePath });
   const destinationStream = fs.createWriteStream(outputFilePath);
   console.log("Zipping %s to %s", directory, destinationDirectory);
 
