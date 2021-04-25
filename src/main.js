@@ -2,15 +2,15 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron')
 const { createZip } = require('../services/zip')
 const { opendir } = require('fs/promises');
 
-ipcMain.on('ondrop', async (event, filePath) => {
+ipcMain.on('ondrop', async (event, path) => {
   try  {
-      const subFolders = [];
-      const dir = await opendir(filePath);
+      const folders = [];
+      const dir = await opendir(path);
       for await (const dirent of dir) {
-        subFolders.push(dirent.name);
+        folders.push(dirent.name);
       }
-      event.returnValue = subFolders
-  }
+      event.returnValue = folders
+    }
   catch (error) {
       console.log(error);
   }
@@ -19,11 +19,11 @@ ipcMain.on('ondrop', async (event, filePath) => {
 ipcMain.on('onsubmit', (event, payload) => {
   const {outputPath, excludedFiles, folderPath} = payload;
   createZip(folderPath, outputPath, excludedFiles)
-  event.returnValue = 'Form submitted'
+  event.returnValue = null
 })
 
 ipcMain.on('opendialog', (event, args) => {
- const response = dialog.showOpenDialogSync( {
+ const filePaths = dialog.showOpenDialogSync( {
     title: 'Output Folder',
     properties: [
       'openDirectory',
@@ -31,7 +31,7 @@ ipcMain.on('opendialog', (event, args) => {
     ],
     message: 'Choose the output folder where you want your zipped file'
   })
-  event.returnValue = response;
+  event.returnValue = filePaths[0];
 })
 
 function createWindow () {
