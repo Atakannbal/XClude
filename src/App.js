@@ -5,8 +5,8 @@ const getFilePathFromEvent = (event) => {
   return event.dataTransfer.files[0].path;
 }
 
-const getSubFolders = (file) => {
-  return ipcRenderer.sendSync('ondrop', file)
+const getSubFolders = (folder) => {
+  return ipcRenderer.sendSync('ondrop', folder)
 }
 
 const openFolderPickerDialog = () => {
